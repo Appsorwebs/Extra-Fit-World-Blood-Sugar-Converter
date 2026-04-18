@@ -1,63 +1,117 @@
-# Extra-Fit-World-Blood-Sugar-Converter
+# Extra Fit Blood Sugar Converter
 
-A simple and colorful Streamlit web application for converting blood sugar levels between milligrams per deciliter (mg/dL) and millimoles per liter (mmol/L). 
-This tool also provides a quick interpretation guide based on the converted values, helping users understand their blood glucose readings. 
-The UI features a light/dark mode toggle and is designed with a focus on readability and ease of use for health and fitness enthusiasts in the Extra Fit World club.
+A powerful and colorful Streamlit web application for converting blood sugar levels between milligrams per deciliter (mg/dL) and millimoles per liter (mmol/L). Built with love for the Extra Fit World community.
 
-## Features
+## ✨ Features
 
-* **Unit Conversion:** Easily convert blood sugar values between mg/dL and mmol/L.
-* **Single Unit Toggle:** A user-friendly dropdown to select the input unit.
-* **Interpretation Guide:** Provides immediate feedback on whether the blood sugar level falls within low, normal, prediabetes, or diabetes ranges,
-* with color-coded warnings and success messages.
-* **Light and Dark Mode:** Offers a toggle to switch between light and dark themes for user preference and comfortable viewing in different environments.
-* **Clean and Intuitive UI:** Built with Streamlit for a straightforward and responsive user experience.
-* **Informative Footer:** Credits the developer.
+- **Bidirectional Conversion** - Convert from mg/dL to mmol/L and vice versa
+- **Interpretation Guide** - Understand your readings with clinical accuracy
+- **Theme Toggle** - Light and Dark mode support
+- **Reading History** - Save and track your readings
+- **Reference Tables** - Clinical ranges for all glucose levels
+- **Responsive Design** - Works on desktop and mobile
+- **Accessibility** - Screen reader friendly
 
-## How to Use
+## 🚀 Quick Start
 
-1.  **Clone the Repository (if you haven't already):**
-    ```bash
-    git clone [https://github.com/YourUsername/Extra-Fit-World-Blood-Sugar-Converter.git](https://github.com/YourUsername/Extra-Fit-World-Blood-Sugar-Converter.git)
-    cd Extra-Fit-World-Blood-Sugar-Converter
-    ```
-    *(Replace `https://github.com/YourUsername/Extra-Fit-World-Blood-Sugar-Converter.git` with the actual URL of your repository)*
+### Install Dependencies
 
-2.  **Install Dependencies:**
-    Make sure you have Streamlit installed. If not, you can install it using pip:
-    ```bash
-    pip install streamlit
-    ```
+```bash
+pip install -r requirements.txt
+```
 
-3.  **Run the Application:**
-    Navigate to the directory containing the `blood_sugar_converter.py` file in your terminal and run the Streamlit app:
-    ```bash
-    streamlit run blood_sugar_converter.py
-    ```
+### Run the App
 
-4.  **Interact with the App:**
-    Once the app is running, it will automatically open in your web browser. You can:
-    * Select the unit of your input value (mg/dL or mmol/L) from the dropdown.
-    * Enter the blood sugar value in the number input field.
-    * Click the "Convert" button to see the converted value and the interpretation.
-    * Toggle between "Light" and "Dark" mode using the theme selection.
+```bash
+streamlit run blood_sugar_converter.py
+```
 
-## Code Structure
+The app will open in your browser at `http://localhost:8501`
 
-* `blood_sugar_converter.py`: Contains the main Streamlit application code, including the conversion function and the user interface elements.
+## 📋 Clinical Reference
 
-## Contributing
+| Status | mg/dL | mmol/L |
+|--------|-------|----------|
+| Low (Hypoglycemia) | < 70 | < 3.9 |
+| Normal (Fasting) | 70-99 | 3.9-5.5 |
+| Prediabetes | 100-125 | 5.6-6.9 |
+| Diabetes | ≥ 126 | ≥ 7.0 |
 
-Contributions are welcome! If you have suggestions for improvements or find any issues, please feel free to open a pull request or submit an issue on the GitHub repository.
+## 🧪 Testing
 
-## Developed By
+Run the conversion tests:
 
-Michael Anderson 
-AI Cloud Engineer, Tech Entrepreneur and CEO @ Appsorwebs Limited
-[Appsorwebs.com](https://appsorwebs.com)
-[Link to the Converter](https://bloodsugarconverter.streamlit.app/)
+```bash
+python -m pytest tests/
+```
 
-## License
+Or manually:
 
-This project is open source.
+```bash
+python -c "
+from blood_sugar_converter import convert_blood_sugar, get_interpretation
 
+# Test conversions
+assert convert_blood_sugar(100, 'mg/dL', 'mmol/L') == 5.6
+assert convert_blood_sugar(5.5, 'mmol/L', 'mg/dL') == 99
+
+# Test interpretations
+assert 'Low' in get_interpretation(50, 'mg/dL')[0]
+assert 'Normal' in get_interpretation(85, 'mg/dL')[0]
+assert 'Prediabetes' in get_interpretation(110, 'mg/dL')[0]
+assert 'Diabetes' in get_interpretation(130, 'mg/dL')[0]
+
+print('All tests passed!')
+"
+```
+
+## 📁 Project Structure
+
+```
+.
+├── blood_sugar_converter.py  # Main application
+├── requirements.txt          # Python dependencies
+├── README.md               # This file
+├── .gitignore             # Git ignore rules
+└── tests/                # Test files
+    └── test_converter.py
+```
+
+## 🔧 Configuration
+
+### Streamlit Config
+
+Create `.streamlit/config.toml`:
+
+```toml
+[server]
+port = 8501
+headless = true
+
+[theme]
+primaryColor = "#4a8bed"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f0f2f6"
+```
+
+## ⚠️ Disclaimer
+
+This tool is for informational purposes only. Always consult a healthcare professional for medical advice, diagnosis, or treatment.
+
+## 📄 License
+
+MIT License - See LICENSE file for details.
+
+## 👨‍💻 Developed By
+
+**Michael Anderson**
+AI Cloud Engineer, Tech Entrepreneur
+CEO @ [Appsorwebs Limited](https://appsorwebs.com)
+
+- 🌐 Website: https://appsorwebs.com
+- 📧 Email: contact@appsorwebs.com
+- 🐙 GitHub: https://github.com/appsorwebs
+
+---
+
+🩸 Part of the **Extra Fit World** health and fitness community
