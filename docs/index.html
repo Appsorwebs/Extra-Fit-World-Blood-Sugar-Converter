@@ -3,8 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🩸 Extra Fit Blood Sugar Converter | Free Offline Tool</title>
+    <title>🩸 Extra Fit Blood Sugar Converter</title>
     <style>
+        :root {
+            --bg-color: #f5f7fa;
+            --card-bg: white;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --border-color: #e0e0e0;
+            --accent: #4a8bed;
+            --accent-hover: #3a7bd5;
+            --success-bg: #d4edda;
+            --success-text: #155724;
+            --warning-bg: #fff3cd;
+            --warning-text: #856404;
+            --error-bg: #f8d7da;
+            --error-text: #721c24;
+        }
+        .dark {
+            --bg-color: #0E1116;
+            --card-bg: #262730;
+            --text-primary: #FAFAFA;
+            --text-secondary: #BBB;
+            --border-color: #4A4A4A;
+            --accent: #4A8BED;
+            --accent-hover: #3A7BD5;
+            --success-bg: #1a3d1a;
+            --success-text: #6fcf97;
+            --warning-bg: #3d3520;
+            --warning-text: #f2c94c;
+            --error-bg: #3d2020;
+            --error-text: #eb5757;
+        }
         * {
             margin: 0;
             padding: 0;
@@ -12,9 +42,10 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         body {
-            background-color: #f5f7fa;
+            background-color: var(--bg-color);
             min-height: 100vh;
             padding: 20px;
+            transition: background-color 0.3s;
         }
         .container {
             max-width: 600px;
@@ -25,23 +56,41 @@
             margin-bottom: 30px;
         }
         .header h1 {
-            color: #333;
+            color: var(--text-primary);
             font-size: 28px;
             margin-bottom: 8px;
         }
         .header p {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 14px;
         }
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        .theme-toggle:hover {
+            background: var(--accent);
+            color: white;
+        }
         .card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 16px;
             padding: 24px;
             margin-bottom: 20px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: background-color 0.3s, color 0.3s;
         }
         .card h2 {
-            color: #333;
+            color: var(--text-primary);
             font-size: 18px;
             margin-bottom: 16px;
         }
@@ -50,7 +99,7 @@
         }
         label {
             display: block;
-            color: #555;
+            color: var(--text-secondary);
             font-size: 14px;
             margin-bottom: 8px;
             font-weight: 500;
@@ -58,14 +107,16 @@
         select, input {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid var(--border-color);
             border-radius: 10px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+            background: var(--card-bg);
+            color: var(--text-primary);
         }
         select:focus, input:focus {
             outline: none;
-            border-color: #4a8bed;
+            border-color: var(--accent);
         }
         .row {
             display: flex;
@@ -77,7 +128,7 @@
         .btn {
             width: 100%;
             padding: 14px;
-            background: #4a8bed;
+            background: var(--accent);
             color: white;
             border: none;
             border-radius: 10px;
@@ -87,13 +138,21 @@
             transition: background 0.3s;
         }
         .btn:hover {
-            background: #3a7bd5;
+            background: var(--accent-hover);
+        }
+        .btn-secondary {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+        .btn-secondary:hover {
+            background: var(--text-secondary);
         }
         .result {
             display: none;
             text-align: center;
             padding: 20px;
-            background: #e8f4fd;
+            background: var(--accent);
+            opacity: 0.1;
             border-radius: 12px;
             margin-top: 20px;
         }
@@ -103,7 +162,7 @@
         .result-value {
             font-size: 32px;
             font-weight: bold;
-            color: #4a8bed;
+            color: var(--accent);
             margin-bottom: 16px;
         }
         .status {
@@ -113,49 +172,116 @@
             font-weight: 500;
         }
         .status.success {
-            background: #d4edda;
-            color: #155724;
+            background: var(--success-bg);
+            color: var(--success-text);
         }
         .status.warning {
-            background: #fff3cd;
-            color: #856404;
+            background: var(--warning-bg);
+            color: var(--warning-text);
         }
         .status.error {
-            background: #f8d7da;
-            color: #721c24;
+            background: var(--error-bg);
+            color: var(--error-text);
+        }
+        .save-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        .save-option input[type="checkbox"] {
+            width: auto;
         }
         .reference {
             margin-top: 20px;
         }
         .reference h3 {
             font-size: 16px;
-            color: #333;
+            color: var(--text-primary);
             margin-bottom: 12px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 14px;
+            color: var(--text-primary);
         }
         th, td {
             padding: 10px;
             text-align: left;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
         }
         th {
-            background: #f8f9fa;
+            background: var(--bg-color);
             font-weight: 600;
-            color: #555;
+            color: var(--text-secondary);
+        }
+        .history-item {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        .history-item .date {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .history-item .values {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+        .history-item .values span {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .history-item .interpretation {
+            font-size: 13px;
+        }
+        .history-empty {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            background: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+        .tab.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
         }
         .footer {
             text-align: center;
             margin-top: 30px;
             padding: 20px;
-            color: #888;
+            color: var(--text-secondary);
             font-size: 13px;
         }
         .footer a {
-            color: #4a8bed;
+            color: var(--accent);
             text-decoration: none;
         }
         .footer p {
@@ -163,102 +289,196 @@
         }
         .dev-info {
             font-size: 12px;
-            color: #999;
+            color: var(--text-secondary);
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid var(--border-color);
         }
     </style>
 </head>
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    
     <div class="container">
         <div class="header">
             <h1>🩸 Extra Fit Blood Sugar Converter</h1>
             <p>Convert between mg/dL and mmol/L blood glucose units</p>
         </div>
 
-        <div class="card">
-            <h2>💱 Convert</h2>
-            <div class="row">
-                <div class="form-group">
-                    <label>From Unit</label>
-                    <select id="fromUnit">
-                        <option value="mg/dL">mg/dL</option>
-                        <option value="mmol/L">mmol/L</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>To Unit</label>
-                    <select id="toUnit">
-                        <option value="mmol/L">mmol/L</option>
-                        <option value="mg/dL">mg/dL</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Blood Sugar Value</label>
-                <input type="number" id="value" placeholder="Enter value" min="0" max="1000" step="0.1" value="100">
-            </div>
-            <button class="btn" onclick="convert()">Convert</button>
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('converter')">💱 Converter</div>
+            <div class="tab" onclick="showTab('history')">📜 History</div>
+            <div class="tab" onclick="showTab('about')">ℹ️ About</div>
+        </div>
 
-            <div class="result" id="result">
-                <div class="result-value" id="resultValue"></div>
-                <div class="status" id="status"></div>
+        <div id="converter" class="tab-content active">
+            <div class="card">
+                <h2>💱 Convert</h2>
+                <div class="row">
+                    <div class="form-group">
+                        <label>From Unit</label>
+                        <select id="fromUnit">
+                            <option value="mg/dL">mg/dL</option>
+                            <option value="mmol/L">mmol/L</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>To Unit</label>
+                        <select id="toUnit">
+                            <option value="mmol/L">mmol/L</option>
+                            <option value="mg/dL">mg/dL</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Blood Sugar Value</label>
+                        <input type="number" id="value" placeholder="Enter value" min="0" max="1000" step="0.1" value="100">
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="date">
+                    </div>
+                </div>
+                <button class="btn" onclick="convert()">Convert</button>
+
+                <div class="result" id="result">
+                    <div class="result-value" id="resultValue"></div>
+                    <div class="status" id="status"></div>
+                </div>
+
+                <div class="save-option">
+                    <input type="checkbox" id="saveReading" checked>
+                    <label for="saveReading">Save this reading to history</label>
+                </div>
+            </div>
+
+            <div class="card reference">
+                <h3>📊 Reference Ranges</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>mg/dL</th>
+                            <th>mmol/L</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Low (Hypoglycemia)</td>
+                            <td>&lt; 70</td>
+                            <td>&lt; 3.9</td>
+                        </tr>
+                        <tr>
+                            <td>Normal (Fasting)</td>
+                            <td>70-99</td>
+                            <td>3.9-5.5</td>
+                        </tr>
+                        <tr>
+                            <td>Prediabetes</td>
+                            <td>100-125</td>
+                            <td>5.6-6.9</td>
+                        </tr>
+                        <tr>
+                            <td>Diabetes</td>
+                            <td>≥ 126</td>
+                            <td>≥ 7.0</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <div class="card reference">
-            <h3>📊 Reference Ranges</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Status</th>
-                        <th>mg/dL</th>
-                        <th>mmol/L</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Low (Hypoglycemia)</td>
-                        <td>&lt; 70</td>
-                        <td>&lt; 3.9</td>
-                    </tr>
-                    <tr>
-                        <td>Normal (Fasting)</td>
-                        <td>70-99</td>
-                        <td>3.9-5.5</td>
-                    </tr>
-                    <tr>
-                        <td>Prediabetes</td>
-                        <td>100-125</td>
-                        <td>5.6-6.9</td>
-                    </tr>
-                    <tr>
-                        <td>Diabetes</td>
-                        <td>≥ 126</td>
-                        <td>≥ 7.0</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div id="history" class="tab-content">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h2>📜 Reading History</h2>
+                    <button class="btn btn-secondary" style="width: auto; padding: 8px 16px; font-size: 14px;" onclick="clearHistory()">Clear All</button>
+                </div>
+                <div id="historyList"></div>
+            </div>
+        </div>
+
+        <div id="about" class="tab-content">
+            <div class="card">
+                <h2>🩸 Extra Fit World Members Blood Sugar Personal Calculator</h2>
+                <div class="dev-info" style="border: none; padding: 0; margin-top: 20px;">
+                    <p style="font-size: 14px; margin-bottom: 12px;">👨‍💻 Developed By</p>
+                    <p><strong>Michael Anderson</strong></p>
+                    <p>AI Cloud Engineer, Tech Entrepreneur</p>
+                    <p>CEO @ Appsorwebs Limited</p>
+                    <p style="margin-top: 16px;">🌐 <a href="https://appsorwebs.com">appsorwebs.com</a></p>
+                    <p>📧 contact@appsorwebs.com</p>
+                    <p>🐙 github.com/appsorwebs</p>
+                </div>
+                <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
+                <h3>Conversion Formulas</h3>
+                <p style="margin-top: 8px; color: var(--text-secondary);">mg/dL → mmol/L: value ÷ 18</p>
+                <p style="color: var(--text-secondary);">mmol/L → mg/dL: value × 18</p>
+                <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
+                <h3>Clinical Reference</h3>
+                <table style="margin-top: 12px;">
+                    <thead>
+                        <tr>
+                            <th>Level</th>
+                            <th>mg/dL</th>
+                            <th>mmol/L</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Low</td><td>&lt; 70</td><td>&lt; 3.9</td></tr>
+                        <tr><td>Normal</td><td>70-99</td><td>3.9-5.5</td></tr>
+                        <tr><td>Prediabetes</td><td>100-125</td><td>5.6-6.9</td></tr>
+                        <tr><td>Diabetes</td><td>≥ 126</td><td>≥ 7.0</td></tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 20px; color: var(--text-secondary); font-size: 13px;">⚠️ This tool is for informational purposes only. Always consult a healthcare professional for medical advice.</p>
+            </div>
         </div>
 
         <div class="footer">
             <p>🩸 Extra Fit Blood Sugar Converter v1.0.0</p>
-            <div class="dev-info">
-                <p>👨‍💻 Developed By Michael Anderson</p>
-                <p>AI Cloud Engineer, Tech Entrepreneur</p>
-                <p>CEO @ <a href="https://appsorwebs.com">Appsorwebs Limited</a></p>
-                <p>🌐 <a href="https://appsorwebs.com">appsorwebs.com</a> | 📧 contact@appsorwebs.com | 🐙 github.com/appsorwebs</p>
-            </div>
-            <p style="margin-top: 16px; color: #999;">⚠️ This tool is for informational purposes only. Always consult a healthcare professional for medical advice.</p>
+            <p style="margin-top: 8px; color: var(--text-secondary);">100% Offline - Works without internet</p>
         </div>
     </div>
 
     <script>
+        let history = JSON.parse(localStorage.getItem('bloodSugarHistory')) || [];
+        let currentTheme = localStorage.getItem('theme') || 'light';
+
+        document.getElementById('date').valueAsDate = new Date();
+        
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark');
+            document.getElementById('themeBtn').textContent = '☀️';
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.body.classList.toggle('dark');
+            document.getElementById('themeBtn').textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+            localStorage.setItem('theme', currentTheme);
+        }
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            const tabs = document.querySelectorAll('.tab');
+            if (tabId === 'converter') tabs[0].classList.add('active');
+            else if (tabId === 'history') tabs[1].classList.add('active');
+            else if (tabId === 'about') tabs[2].classList.add('active');
+            
+            document.getElementById(tabId).classList.add('active');
+            
+            if (tabId === 'history') renderHistory();
+        }
+
         function convert() {
             const value = parseFloat(document.getElementById('value').value);
             const fromUnit = document.getElementById('fromUnit').value;
             const toUnit = document.getElementById('toUnit').value;
+            const date = document.getElementById('date').value;
 
             if (isNaN(value) || value < 0) {
                 alert('Please enter a valid blood sugar value');
@@ -310,6 +530,57 @@
             statusEl.textContent = interpretation;
             statusEl.className = 'status ' + statusClass;
             document.getElementById('result').classList.add('show');
+
+            if (document.getElementById('saveReading').checked) {
+                const reading = {
+                    value: value,
+                    fromUnit: fromUnit,
+                    result: result,
+                    toUnit: toUnit,
+                    interpretation: interpretation,
+                    statusClass: statusClass,
+                    date: date || new Date().toISOString().split('T')[0]
+                };
+                history.unshift(reading);
+                localStorage.setItem('bloodSugarHistory', JSON.stringify(history));
+                showToast('💾 Reading saved!');
+            }
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('historyList');
+            if (history.length === 0) {
+                container.innerHTML = '<div class="history-empty">No readings saved yet.<br>Convert a value and check "Save this reading" to save it here.</div>';
+                return;
+            }
+            
+            container.innerHTML = history.map((r, i) => `
+                <div class="history-item">
+                    <div class="date">📅 ${r.date}</div>
+                    <div class="values">
+                        <span>${r.value} ${r.fromUnit}</span>
+                        <span>→ ${r.result} ${r.toUnit}</span>
+                    </div>
+                    <div class="interpretation status ${r.statusClass}">${r.interpretation}</div>
+                </div>
+            `).join('');
+        }
+
+        function clearHistory() {
+            if (confirm('Clear all reading history?')) {
+                history = [];
+                localStorage.setItem('bloodSugarHistory', JSON.stringify(history));
+                renderHistory();
+                showToast('🗑️ History cleared');
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 24px;border-radius:8px;font-size:14px;z-index:1000;animation:fadeIn 0.3s';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
         }
 
         document.getElementById('fromUnit').addEventListener('change', function() {
@@ -318,6 +589,8 @@
                 toUnit.value = this.value === 'mg/dL' ? 'mmol/L' : 'mg/dL';
             }
         });
+
+        renderHistory();
     </script>
 </body>
 </html>
