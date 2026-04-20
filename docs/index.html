@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🩸 Extra Fit Blood Sugar Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .card h2 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        select, input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: #4a8bed;
+        }
+        .row {
+            display: flex;
+            gap: 12px;
+        }
+        .row .form-group {
+            flex: 1;
+        }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #4a8bed;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #3a7bd5;
+        }
+        .result {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: #e8f4fd;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        .result.show {
+            display: block;
+        }
+        .result-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #4a8bed;
+            margin-bottom: 16px;
+        }
+        .status {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-weight: 500;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .reference {
+            margin-top: 20px;
+        }
+        .reference h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #888;
+            font-size: 13px;
+        }
+        .footer a {
+            color: #4a8bed;
+            text-decoration: none;
+        }
+        .footer p {
+            margin: 4px 0;
+        }
+        .dev-info {
+            font-size: 12px;
+            color: #999;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🩸 Extra Fit Blood Sugar Converter</h1>
+            <p>Convert between mg/dL and mmol/L blood glucose units</p>
+        </div>
+
+        <div class="card">
+            <h2>💱 Convert</h2>
+            <div class="row">
+                <div class="form-group">
+                    <label>From Unit</label>
+                    <select id="fromUnit">
+                        <option value="mg/dL">mg/dL</option>
+                        <option value="mmol/L">mmol/L</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>To Unit</label>
+                    <select id="toUnit">
+                        <option value="mmol/L">mmol/L</option>
+                        <option value="mg/dL">mg/dL</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Blood Sugar Value</label>
+                <input type="number" id="value" placeholder="Enter value" min="0" max="1000" step="0.1" value="100">
+            </div>
+            <button class="btn" onclick="convert()">Convert</button>
+
+            <div class="result" id="result">
+                <div class="result-value" id="resultValue"></div>
+                <div class="status" id="status"></div>
+            </div>
+        </div>
+
+        <div class="card reference">
+            <h3>📊 Reference Ranges</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>mg/dL</th>
+                        <th>mmol/L</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Low (Hypoglycemia)</td>
+                        <td>&lt; 70</td>
+                        <td>&lt; 3.9</td>
+                    </tr>
+                    <tr>
+                        <td>Normal (Fasting)</td>
+                        <td>70-99</td>
+                        <td>3.9-5.5</td>
+                    </tr>
+                    <tr>
+                        <td>Prediabetes</td>
+                        <td>100-125</td>
+                        <td>5.6-6.9</td>
+                    </tr>
+                    <tr>
+                        <td>Diabetes</td>
+                        <td>≥ 126</td>
+                        <td>≥ 7.0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>🩸 Extra Fit Blood Sugar Converter v1.0.0</p>
+            <div class="dev-info">
+                <p>👨‍💻 Developed By Michael Anderson</p>
+                <p>AI Cloud Engineer, Tech Entrepreneur</p>
+                <p>CEO @ <a href="https://appsorwebs.com">Appsorwebs Limited</a></p>
+                <p>🌐 <a href="https://appsorwebs.com">appsorwebs.com</a> | 📧 contact@appsorwebs.com | 🐙 github.com/appsorwebs</p>
+            </div>
+            <p style="margin-top: 16px; color: #999;">⚠️ This tool is for informational purposes only. Always consult a healthcare professional for medical advice.</p>
+        </div>
+    </div>
+
+    <script>
+        function convert() {
+            const value = parseFloat(document.getElementById('value').value);
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+
+            if (isNaN(value) || value < 0) {
+                alert('Please enter a valid blood sugar value');
+                return;
+            }
+
+            let result;
+            if (fromUnit === toUnit) {
+                result = value;
+            } else if (fromUnit === 'mg/dL' && toUnit === 'mmol/L') {
+                result = Math.round((value / 18) * 10) / 10;
+            } else if (fromUnit === 'mmol/L' && toUnit === 'mg/dL') {
+                result = Math.round(value * 18);
+            }
+
+            let interpretation, statusClass;
+            if (fromUnit === 'mg/dL') {
+                if (value < 70) {
+                    interpretation = '⚠️ Low blood sugar (Hypoglycemia)';
+                    statusClass = 'warning';
+                } else if (value < 100) {
+                    interpretation = '✅ Normal fasting level';
+                    statusClass = 'success';
+                } else if (value < 126) {
+                    interpretation = '⚠️ Prediabetes range';
+                    statusClass = 'warning';
+                } else {
+                    interpretation = '🔴 Diabetes range';
+                    statusClass = 'error';
+                }
+            } else {
+                if (value < 3.9) {
+                    interpretation = '⚠️ Low blood sugar (Hypoglycemia)';
+                    statusClass = 'warning';
+                } else if (value < 5.6) {
+                    interpretation = '✅ Normal fasting level';
+                    statusClass = 'success';
+                } else if (value < 7.0) {
+                    interpretation = '⚠️ Prediabetes range';
+                    statusClass = 'warning';
+                } else {
+                    interpretation = '🔴 Diabetes range';
+                    statusClass = 'error';
+                }
+            }
+
+            document.getElementById('resultValue').textContent = result + ' ' + toUnit;
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = interpretation;
+            statusEl.className = 'status ' + statusClass;
+            document.getElementById('result').classList.add('show');
+        }
+
+        document.getElementById('fromUnit').addEventListener('change', function() {
+            const toUnit = document.getElementById('toUnit');
+            if (this.value === toUnit.value) {
+                toUnit.value = this.value === 'mg/dL' ? 'mmol/L' : 'mg/dL';
+            }
+        });
+    </script>
+</body>
+</html>
