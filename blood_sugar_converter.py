@@ -70,7 +70,6 @@ def main():
 
     dark_css = """
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
     html, body, .stApp {
         background-color: #0E1116 !important;
     }
@@ -257,7 +256,18 @@ def about_page():
     st.title("ℹ️ About")
 
     st.markdown("""
-    ### 🩸 Blood Sugar Converter
+    ### 🩸 EXTRA FIT WORLD MEMBERS BLOOD SUGAR PERSONAL CALCULATOR
+
+    👨‍💻 Developed By  
+    Michael Anderson  
+    AI Cloud Engineer, Tech Entrepreneur  
+    CEO @ Appsorwebs Limited
+
+    🌐 Website: https://appsorwebs.com  
+    📧 Email: contact@appsorwebs.com  
+    🐙 GitHub: https://github.com/appsorwebs
+
+    ### Blood Sugar Converter
     
     A simple and powerful tool for converting blood glucose levels between the two most common units:
     
@@ -281,15 +291,9 @@ def about_page():
     ### ⚠️ Important Disclaimer
     
     This tool is for **informational purposes only**. Always consult a healthcare professional for medical advice, diagnosis, or treatment. Do not make medical decisions based solely on this converter.
-    
-    ---
-    
-    **Developed by** [Appsorwebs.com](https://appsorwebs.com)
-    
-    Part of the Extra Fit World health and fitness community.
     """)
 
-    st.caption("🩸 Extra Fit - Blood Sugar Converter v1.0.0")
+    st.caption("🩸 Extra Fit World - Blood Sugar Converter v1.0.0")
 
 
 if __name__ == "__main__":
